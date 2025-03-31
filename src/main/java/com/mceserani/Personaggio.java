@@ -2,12 +2,12 @@ package com.mceserani;
 
 public class Personaggio {
 
-    String nome;
-    String provenienza;
-    int età;
-    Skin skin;
-    int vita = 100;
-    Posizione p;
+    private String nome;
+    private String provenienza;
+    private int età;
+    private Skin skin;
+    private int vita = 100;
+    private Posizione p;
 
     Personaggio(String n, String pr, int e, Skin s, Posizione pos){
         nome = n;
@@ -16,6 +16,18 @@ public class Personaggio {
         skin = s;
         p = pos;
     }
+
+    String getNome(){
+        return nome;
+    }
+
+    int getVita(){
+        return vita;
+    }
+
+    void setVita(int v){
+        vita = v;
+    }   
 
     void siMuove(Posizione dest){
         p = dest;
@@ -26,5 +38,10 @@ public class Personaggio {
         if (vita > 100)
             vita = 100;
     }
+
+    @Override
+    public String toString(){
+        return "Nome: " + nome + "\nProvenienza: " + provenienza + "\nEtà: " + età + "\nVita: " + vita + "\nPosizione: " + p + "\nSkin: " + skin;
+    } 
 
 }
