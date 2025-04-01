@@ -1,7 +1,19 @@
 package com.mceserani;
 
+import java.util.Random;
+
 public class Ted {
+
+	static final int MX = 15;
+	static final int MY = 15;
+
+	static Cibo cibi [];
+	static Pozione pozioni [];
+	static Mago nemici [];
+	static Magia magie [];
 	
+	static Mago M;
+
 	private Ted(){
 	}
 
@@ -13,96 +25,92 @@ public class Ted {
 	 */
     public static void main(String[] args){
 
-		Mago m1 = null;
-		Mago m2 = null;
+		System.out.println("Benvenuto nel gioco di ruolo Ted!");
+		System.out.println("Iniziamo a creare il tuo personaggio.");
 
-		System.out.print("Inserisci il nome del primo mago: ");
-		String nome = System.console().readLine();
-		System.out.print("Inserisci la provenienza del primo mago: ");
-		String provenienza = System.console().readLine();
-		System.out.print("Inserisci l'età del primo mago: ");
-		int età = Integer.parseInt(System.console().readLine());
+		do {
+			System.out.print("Inserisci il nome del tuo personaggio: ");
+			String nome = System.console().readLine();
+			System.out.print("Inserisci la provenienza del tuo personaggio: ");
+			String provenienza = System.console().readLine();
+			System.out.print("Inserisci l'età del tuo personaggio: ");
+			int età = Integer.parseInt(System.console().readLine());
 
-		if (nome.length() > 0 && provenienza.length() > 0 && età >= 0){
-			m1 = new Mago(nome,provenienza,età,null,new Posizione(0,0));
+			if (nome.length() > 0 && provenienza.length() > 0 && età >= 0){
+				M = new Mago(nome,provenienza,età,null,new Posizione(0,0));
+			} else {
+				System.out.println("Parametri non validi: non ho creato il personaggio.");
+			}
+		} while (M == null);
 
-			System.out.println("Nome: " + m1.getNome());
-			System.out.println("Provenienza: " + m1.provenienza);
-			System.out.println("Età: " + m1.età);
-			System.out.println("Vita: " + m1.vita);
-			System.out.println("Posizione: " + m1.p);
-			System.out.println("Skin: " + m1.skin);
-			System.out.println("mana: " + m1.mana);
+		System.out.println("Hai creato il tuo personaggio: " + M.getNome());
 
-		} else {
-			System.out.println("Parametri non validi: non ho creato il personaggio.");
-		}
-
-		System.out.print("Inserisci il nome del secondo mago: ");
-		nome = System.console().readLine();
-		System.out.print("Inserisci la provenienza del secondo mago: ");
-		provenienza = System.console().readLine();
-		System.out.print("Inserisci l'età del secondo mago: ");
-		età = Integer.parseInt(System.console().readLine());
-
-		if (nome.length() > 0 && provenienza.length() > 0 && età >= 0){
-			m2 = new Mago(nome,provenienza,età,null,new Posizione(0,0));
-
-			System.out.println("Nome: " + m2.nome);
-			System.out.println("Provenienza: " + m2.provenienza);
-			System.out.println("Età: " + m2.età);
-			System.out.println("Vita: " + m2.vita);
-			System.out.println("Posizione: " + m2.p);
-			System.out.println("Skin: " + m2.skin);
-			System.out.println("mana: " + m2.mana);
-
-		} else {
-			System.out.println("Parametri non validi: non ho creato il personaggio.");
-		}
+		Random r = new Random();
 		
-		Magia m = new Magia("Abracadabra",10,15);
-		Pozione p = new Pozione("Blue Pot", 25, new Posizione(0,0));
+		cibi = new Cibo[5];
+		for (int i = 0; i < 3; i++){
+			cibi[i] = new Cibo("Mela",10,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+		}
+		for (int i = 3; i < 5; i++){
+			cibi[i] = new Cibo("Bistecca",25,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+		}
 
-		System.out.println("Il mago " + m1.nome + " lancia la magia " + m.nome);
+		pozioni = new Pozione[5];
+		for (int i = 0; i < 3; i++){
+			pozioni[i] = new Pozione("BluePot",15,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+		}
+		for (int i = 3; i < 5; i++){
+			pozioni[i] = new Pozione("PurplePot",10,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+		}
 
-		m1.lanciaMagia(m,m2);
+		nemici = new Mago[3];
+		nemici[0] = new Mago("Casanova","Isengard",100,null,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+		nemici[1] = new Mago("Mago di Segrate","Segrate",100,null,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+		nemici[2] = new Mago("Divino Otelma","Genova",100,null,new Posizione(r.nextInt(MX),r.nextInt(MY)),25);
 
-		System.out.println(m1.toString());
-		System.out.println(m2.toString());
+		magie = new Magia[2];
+		magie[0] = new Magia("Fulmine",10,20);
+		magie[1] = new Magia("Palla di Fuoco",20,30);
 
-		System.out.print("Premi invio per continuare...");
-		System.console().readLine();
+		disegnaMappa();
+		
+    } // End main()
 
-		System.out.println("Il mago " + m2.nome + " lancia la magia " + m.nome);
+	static void disegnaMappa(){
+		// Matrice strutturata in righe e colonne
+		// MY righe e MX colonne
+		// Per ogni casella disegnamo:
+		// - M per il mago protagonista
+		// - c per un cibo
+		// - p per una pozione
+		// - N per un nemico
+		// - . se la casella è vuota
+		// La gerarchia è: M, N, p, c, .
 
-		m2.lanciaMagia(m,m1);
+		char c = '.';
+		for (int y = 0; y < MY; y++){
+			for (int x = 0; x < MX; x++){
+				for (int i = 0; i < cibi.length; i++){
+					if (cibi[i].getPosizione().equals(new Posizione(x,y)))
+						c = 'c';
+				}
+				for (int i = 0; i < pozioni.length; i++){
+					if (pozioni[i].getPosizione().equals(new Posizione(x,y)))
+						c = 'p';
+				}
+				for (int i = 0; i < nemici.length; i++){
+					if (nemici[i].getPosizione().equals(new Posizione(x,y)))
+						c = 'N';
+				}
+				if (M.getPosizione().equals(new Posizione(x,y)))
+					c = 'M';
+				System.out.print(c);
+				System.out.print(" ");
+				c = '.';
+			}
+			System.out.println("");
+		}
 
-		System.out.println(m1.toString());
-		System.out.println(m2.toString());
+	} // End disegnaMappa
 
-		System.out.print("Premi invio per continuare...");
-		System.console().readLine();
-
-		System.out.println("Il mago " + m1.nome + " beve la pozione " + p.nome);
-
-		m1.bevePozione(p);
-
-		System.out.println(m1.toString());
-		System.out.println(m2.toString());
-
-		System.out.print("Premi invio per continuare...");
-		System.console().readLine();
-
-		System.out.println("Il mago " + m2.nome + " beve la pozione " + p.nome);
-
-		m2.bevePozione(p);
-
-		System.out.println(m1.toString());
-		System.out.println(m2.toString());
-
-		System.out.print("Premi invio per continuare...");
-		System.console().readLine();
-
-    }
-
-}
+} // End class Ted
