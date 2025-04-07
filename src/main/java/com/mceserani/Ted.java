@@ -97,6 +97,10 @@ public class Ted {
 						if (nemici[i].getVita() <= 0){
 							System.out.println("Il nemico è morto!");
 							nemici[i].setPosizione(new Posizione(-1,-1));
+							if (haiVinto()){
+								System.out.println("Hai vinto! Congrats!");
+								return;
+							}
 						}
 					}
 					if (nemici[i].getVita() > 0){
@@ -110,10 +114,8 @@ public class Ted {
 							}
 						}
 					}
-
 					System.out.println("Premi invio per continuare...");
 					System.console().readLine();
-
 				}
 			}
 		}
@@ -156,5 +158,14 @@ public class Ted {
 		}
 
 	} // End disegnaMappa
+
+	public static boolean haiVinto(){
+		boolean vittoria = true;
+		for (int i = 0; i < nemici.length; i++){
+			if (!nemici[i].getPosizione().equals(new Posizione(-1,-1)))
+				vittoria = false;
+		}
+		return vittoria;
+	}
 
 } // End class Ted
