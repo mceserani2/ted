@@ -1,5 +1,7 @@
 package com.mceserani;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Random;
 
 public class Ted {
@@ -72,7 +74,24 @@ public class Ted {
 		magie[0] = new Magia("Fulmine",10,20);
 		magie[1] = new Magia("Palla di Fuoco",20,30);
 
-		disegnaMappa();
+		Reader reader = System.console().reader();
+		char command;
+
+		// Turno di gioco
+		while(true){
+			System.out.print("\033[H\033[2J");
+			System.out.flush();
+			disegnaMappa();
+			System.out.print(":>");
+			try{
+				command = (char) reader.read();
+			} catch(IOException e){
+				System.out.println("Ops! Qualcosa è andato storto!");
+				return;
+			}
+
+			M.siMuove(command, Ted.MX, Ted.MY);
+		}
 		
     } // End main()
 

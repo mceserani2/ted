@@ -82,8 +82,21 @@ public class Personaggio {
     }
 
     // Metodi
-    public void siMuove(Posizione dest){
-        p = dest;
+    public void siMuove(char dir, int dimX, int dimY){
+        switch(dir){
+			case 'w':   if (this.getPosizione().getY() > 0)
+                            this.getPosizione().setY(this.getPosizione().getY() - 1); 
+                        break;	
+            case 'a':   if (this.getPosizione().getX() > 0)
+                            this.getPosizione().setX(this.getPosizione().getX() - 1); 
+                        break;
+			case 's':   if (this.getPosizione().getY() < dimY - 1)
+                            this.getPosizione().setY(this.getPosizione().getY() + 1); 
+                        break;
+			case 'd':   if (this.getPosizione().getX() < dimX - 1)
+                            this.getPosizione().setX(this.getPosizione().getX() + 1); 
+                        break;
+		}
     }
 
     public void mangia(Cibo c){
