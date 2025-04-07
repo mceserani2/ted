@@ -1,7 +1,5 @@
 package com.mceserani;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.Random;
 
 public class Ted {
@@ -74,7 +72,6 @@ public class Ted {
 		magie[0] = new Magia("Fulmine",10,20);
 		magie[1] = new Magia("Palla di Fuoco",20,30);
 
-		Reader reader = System.console().reader();
 		char command;
 
 		// Turno di gioco
@@ -83,14 +80,42 @@ public class Ted {
 			System.out.flush();
 			disegnaMappa();
 			System.out.print(":>");
-			try{
-				command = (char) reader.read();
-			} catch(IOException e){
-				System.out.println("Ops! Qualcosa è andato storto!");
-				return;
-			}
-
+			command = System.console().readLine().charAt(0);
 			M.siMuove(command, Ted.MX, Ted.MY);
+			for (int i = 0; i < nemici.length; i++){
+				if (nemici[i].getPosizione().equals(M.getPosizione())){
+					System.out.println("Hai incontrato il nemico " + nemici[i].getNome());
+					System.out.println("Quale magia vuoi lanciare?");
+					for (int j = 0; j < magie.length; j++){
+						System.out.println(j + " - " + magie[j].getNome());
+					}
+					System.out.print(":>");
+					int m = Integer.parseInt(System.console().readLine());
+					boolean hit = M.lanciaMagia(magie[m],nemici[i]);
+					if (hit) {
+						System.out.println("Hai colpito il nemico.");
+						if (nemici[i].getVita() <= 0){
+							System.out.println("Il nemico è morto!");
+							nemici[i].setPosizione(new Posizione(-1,-1));
+						}
+					}
+					if (nemici[i].getVita() > 0){
+						hit = nemici[i].lanciaMagia(magie[r.nextInt(magie.length)], M);
+						if (hit) {
+							System.out.println("Il nemico ti ha colpito");
+							System.out.println("Vita residua: " + M.getVita());
+							if (M.getVita() <= 0){
+								System.out.println("Sei morto!");
+								return;
+							}
+						}
+					}
+
+					System.out.println("Premi invio per continuare...");
+					System.console().readLine();
+
+				}
+			}
 		}
 		
     } // End main()

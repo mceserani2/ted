@@ -30,14 +30,20 @@ public class Mago extends Personaggio{
         return mana;
     }
 
-    public void lanciaMagia(Magia m, Personaggio p){
+    public boolean lanciaMagia(Magia m, Personaggio p){
         Random r = new Random();
+        boolean hit = false;
         if (mana >= m.getMana())
             mana -= m.getMana();
-        if (r.nextInt(10) + 1 > 3)
+        else
+            return hit;
+        if (r.nextInt(10) + 1 > 3){
             p.setVita(p.getVita() - m.getDanno());
+            hit = true;
+        }
         if (p.getVita() < 0)
             p.setVita(0);
+        return hit;
     }
 
     public void bevePozione(Pozione p){
