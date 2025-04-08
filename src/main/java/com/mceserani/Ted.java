@@ -1,5 +1,6 @@
 package com.mceserani;
 
+import java.io.Console;
 import java.util.Random;
 
 public class Ted {
@@ -75,13 +76,29 @@ public class Ted {
 		char command;
 
 		// Turno di gioco
+		// 1. Pulire lo schermo
+		// 2. Disegnare la mappa
+		// 3. Far muovere il mago
+		// 4. Verificare la presenza di nemici: nel caso combattere
+		// 5. Verificare la presenza di cibo: nel caso decidere se mangiarlo
+		// 6. Verificare la presenza di pozioni: nel caso decidere se berle
+		// 7. Muovere i nemici
+		// 8. Attende che il giocatore sia pronto per il nuovo turno
 		while(true){
+
+			// 1.
 			System.out.print("\033[H\033[2J");
 			System.out.flush();
+			
+			// 2.
 			disegnaMappa();
+			
+			// 3.
 			System.out.print(":>");
 			command = System.console().readLine().charAt(0);
 			M.siMuove(command, Ted.MX, Ted.MY);
+			
+			// 4.
 			for (int i = 0; i < nemici.length; i++){
 				if (nemici[i].getPosizione().equals(M.getPosizione())){
 					System.out.println("Hai incontrato il nemico " + nemici[i].getNome());
@@ -114,10 +131,69 @@ public class Ted {
 							}
 						}
 					}
+
+					// 8.
+					System.out.println("Premi invio per continuare...");
+					System.console().readLine();
+
+				}
+			}
+
+			// 5.
+			for (int i = 0; i < cibi.length; i++){
+				if (cibi[i].getPosizione().equals(M.getPosizione())){
+					System.out.println("Hai trovato una " + cibi[i].getNome() + "!");
+					System.out.println("Vuoi mangiarla? (s/n)");
+					System.out.print(":>");
+					command = System.console().readLine().charAt(0);
+					if (command == 's'){
+						M.mangia(cibi[i]);
+						cibi[i].setPosizione(new Posizione(-2,-2));
+					}
+					
+					// 8.
 					System.out.println("Premi invio per continuare...");
 					System.console().readLine();
 				}
 			}
+
+			// 6.
+			for (int i = 0; i < pozioni.length; i++){
+				if (pozioni[i].getPosizione().equals(M.getPosizione())){
+					System.out.println("Hai trovato una " + pozioni[i].getNome() + "!");
+					System.out.println("Vuoi berla? (s/n)");
+					System.out.print(":>");
+					command = System.console().readLine().charAt(0);
+					if (command == 's'){
+						M.bevePozione(pozioni[i]);
+						pozioni[i].setPosizione(new Posizione(-3,-3));
+					}
+
+					// 88.
+					System.out.println("Premi invio per continuare...");
+					System.console().readLine();
+				}
+			}
+
+			// 7.
+			for (int i = 0; i < nemici.length; i++){
+				if (!nemici[i].getPosizione().equals(new Posizione(-1, -1))){
+					int mov = r.nextInt(4);
+					switch(mov){
+						case 0: nemici[i].siMuove('w', MX, MY);
+								break;
+						case 1: nemici[i].siMuove('a', MX, MY);
+								break;
+						case 2: nemici[i].siMuove('s', MX, MY);
+								break;
+						case 3: nemici[i].siMuove('d', MX, MY);
+								break;
+					}
+				}
+			}
+
+			stampaStato();
+
 		}
 		
     } // End main()
@@ -166,6 +242,23 @@ public class Ted {
 				vittoria = false;
 		}
 		return vittoria;
+	}
+
+	public static void stampaStato(){
+		// Debug: stampa lo stato di tutti i vettori e del mago
+		System.out.println("Stato del mago: " + M.toString());
+		System.out.println("Stato dei cibi: ");
+		for (int i = 0; i < cibi.length; i++){
+			System.out.println(cibi[i].toString());
+		}
+		System.out.println("Stato delle pozioni: ");	
+		for (int i = 0; i < pozioni.length; i++){
+			System.out.println(pozioni[i].toString());
+		}
+		System.out.println("Stato dei nemici: ");
+		for (int i = 0; i < nemici.length; i++){
+			System.out.println(nemici[i].toString());
+		}
 	}
 
 } // End class Ted
