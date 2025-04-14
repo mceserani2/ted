@@ -6,6 +6,8 @@ public class Magia {
     private int mana;
     private int danno;
 
+    public Magia(){}
+
     public Magia(String n, int m, int d){
         nome = n;
         mana = m;

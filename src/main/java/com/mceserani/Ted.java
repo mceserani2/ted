@@ -30,60 +30,105 @@ public class Ted {
 	 */
     public static void main(String[] args){
 
-		System.out.println("Benvenuto nel gioco di ruolo Ted!");
-		System.out.println("Iniziamo a creare il tuo personaggio.");
-
-		do {
-			System.out.print("Inserisci il nome del tuo personaggio: ");
-			String nome = System.console().readLine();
-			System.out.print("Inserisci la provenienza del tuo personaggio: ");
-			String provenienza = System.console().readLine();
-			System.out.print("Inserisci l'età del tuo personaggio: ");
-			int età = Integer.parseInt(System.console().readLine());
-
-			if (nome.length() > 0 && provenienza.length() > 0 && età >= 0){
-				M = new Mago(nome,provenienza,età,null,new Posizione(0,0));
-			} else {
-				System.out.println("Parametri non validi: non ho creato il personaggio.");
-			}
-		} while (M == null);
-
-		System.out.println("Hai creato il tuo personaggio: " + M.getNome());
-
-		ObjectMapper mapper = new ObjectMapper();
-		ObjectWriter ow = mapper.writerWithDefaultPrettyPrinter();
-		try {
-			ow.writeValue(new File("m.json"), M);
-		} catch (IOException e) {
-			System.out.println("Non ho potuto salvare il file!");
-		}
-
 		Random r = new Random();
-		
-		cibi = new Cibo[5];
-		for (int i = 0; i < 3; i++){
-			cibi[i] = new Cibo("Mela",10,new Posizione(r.nextInt(MX),r.nextInt(MY)));
-		}
-		for (int i = 3; i < 5; i++){
-			cibi[i] = new Cibo("Bistecca",25,new Posizione(r.nextInt(MX),r.nextInt(MY)));
-		}
 
-		pozioni = new Pozione[5];
-		for (int i = 0; i < 3; i++){
-			pozioni[i] = new Pozione("BluePot",15,new Posizione(r.nextInt(MX),r.nextInt(MY)));
-		}
-		for (int i = 3; i < 5; i++){
-			pozioni[i] = new Pozione("PurplePot",10,new Posizione(r.nextInt(MX),r.nextInt(MY)));
-		}
+		System.out.println("Benvenuto nel gioco di ruolo Ted!");
 
-		nemici = new Mago[3];
-		nemici[0] = new Mago("Casanova","Isengard",100,null,new Posizione(r.nextInt(MX),r.nextInt(MY)));
-		nemici[1] = new Mago("Mago di Segrate","Segrate",100,null,new Posizione(r.nextInt(MX),r.nextInt(MY)));
-		nemici[2] = new Mago("Divino Otelma","Genova",100,null,new Posizione(r.nextInt(MX),r.nextInt(MY)),25);
+		System.out.println("Vuoi creare una nuova partita oppure caricarne una esistente? (n/c)");
+		System.out.print(":>");
+		char opt = System.console().readLine().charAt(0);
 
-		magie = new Magia[2];
-		magie[0] = new Magia("Fulmine",10,20);
-		magie[1] = new Magia("Palla di Fuoco",20,30);
+		if (opt == 'c'){
+			System.out.println("Carico la partita...");
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				M = mapper.readValue(new File("m.json"), Mago.class);
+				cibi = mapper.readValue(new File("cibi.json"), Cibo[].class);
+				pozioni = mapper.readValue(new File("pozioni.json"), Pozione[].class);
+				nemici = mapper.readValue(new File("nemici.json"), Mago[].class);
+				magie = mapper.readValue(new File("magie.json"), Magia[].class);
+			} catch (IOException e) {
+				System.out.println("Non ho potuto caricare il file!");
+				System.out.println(e.getMessage());
+			}
+		} else {
+
+			System.out.println("Iniziamo a creare il tuo personaggio.");
+
+			do {
+				System.out.print("Inserisci il nome del tuo personaggio: ");
+				String nome = System.console().readLine();
+				System.out.print("Inserisci la provenienza del tuo personaggio: ");
+				String provenienza = System.console().readLine();
+				System.out.print("Inserisci l'età del tuo personaggio: ");
+				int età = Integer.parseInt(System.console().readLine());
+
+				if (nome.length() > 0 && provenienza.length() > 0 && età >= 0){
+					M = new Mago(nome,provenienza,età,null,new Posizione(0,0));
+				} else {
+					System.out.println("Parametri non validi: non ho creato il personaggio.");
+				}
+			} while (M == null);
+
+			System.out.println("Hai creato il tuo personaggio: " + M.getNome());
+
+			ObjectMapper mapper = new ObjectMapper();
+			ObjectWriter ow = mapper.writerWithDefaultPrettyPrinter();
+			try {
+				ow.writeValue(new File("m.json"), M);
+			} catch (IOException e) {
+				System.out.println("Non ho potuto salvare il file!");
+			}
+			
+			cibi = new Cibo[5];
+			for (int i = 0; i < 3; i++){
+				cibi[i] = new Cibo("Mela",10,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+			}
+			for (int i = 3; i < 5; i++){
+				cibi[i] = new Cibo("Bistecca",25,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+			}
+
+			try {
+				ow.writeValue(new File("cibi.json"), cibi);
+			} catch (IOException e) {
+				System.out.println("Non ho potuto salvare il file!");
+			}
+
+			pozioni = new Pozione[5];
+			for (int i = 0; i < 3; i++){
+				pozioni[i] = new Pozione("BluePot",15,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+			}
+			for (int i = 3; i < 5; i++){
+				pozioni[i] = new Pozione("PurplePot",10,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+			}
+
+			try {
+				ow.writeValue(new File("pozioni.json"), pozioni);
+			} catch (IOException e) {
+				System.out.println("Non ho potuto salvare il file!");
+			}
+
+			nemici = new Mago[3];
+			nemici[0] = new Mago("Casanova","Isengard",100,null,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+			nemici[1] = new Mago("Mago di Segrate","Segrate",100,null,new Posizione(r.nextInt(MX),r.nextInt(MY)));
+			nemici[2] = new Mago("Divino Otelma","Genova",100,null,new Posizione(r.nextInt(MX),r.nextInt(MY)),25);
+
+			try {
+				ow.writeValue(new File("nemici.json"), nemici);
+			} catch (IOException e) {
+				System.out.println("Non ho potuto salvare il file!");
+			}
+
+			magie = new Magia[2];
+			magie[0] = new Magia("Fulmine",10,20);
+			magie[1] = new Magia("Palla di Fuoco",20,30);
+
+			try {
+				ow.writeValue(new File("magie.json"), magie);
+			} catch (IOException e) {
+				System.out.println("Non ho potuto salvare il file!");
+			}
+		} // End if (opt == 'c')
 
 		char command;
 
@@ -108,6 +153,17 @@ public class Ted {
 			// 3.
 			System.out.print(":>");
 			command = System.console().readLine().charAt(0);
+			if (command == 'q'){
+				System.out.println("Hai abbandonato il gioco.");
+				return;
+			}
+			if (command == 'p'){
+				salvaPartita();
+				System.out.println("Hai salvato la partita.");
+				System.out.println("Premi invio per continuare...");
+				System.console().readLine();
+				continue;
+			}
 			M.siMuove(command, Ted.MX, Ted.MY);
 			
 			// 4.
@@ -272,5 +328,19 @@ public class Ted {
 			System.out.println(nemici[i].toString());
 		}
 	}
+
+	public static void salvaPartita(){
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectWriter ow = mapper.writerWithDefaultPrettyPrinter();
+		try {
+			ow.writeValue(new File("m.json"), M);
+			ow.writeValue(new File("cibi.json"), cibi);
+			ow.writeValue(new File("pozioni.json"), pozioni);
+			ow.writeValue(new File("nemici.json"), nemici);
+			ow.writeValue(new File("magie.json"), magie);
+		} catch (IOException e) {
+			System.out.println("Non ho potuto salvare il file!");
+		}
+	} // End salvaPartita
 
 } // End class Ted

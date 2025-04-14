@@ -6,6 +6,8 @@ public class Cibo {
     private int energia;
     private Posizione posizione;
 
+    public Cibo(){}
+
     public Cibo(String n, int e, Posizione p){
         nome = n;
         energia = e;

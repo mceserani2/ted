@@ -5,6 +5,8 @@ public class Posizione {
     private int x;
     private int y;
 
+    public Posizione(){}
+
     public Posizione(int x, int y){
         this.x = x;
         this.y = y;

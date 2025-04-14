@@ -6,6 +6,8 @@ public class Pozione {
     private int mana;
     private Posizione posizione;
 
+    public Pozione(){}
+
     public Pozione(String n, int m, Posizione p){
         posizione = p;
         nome = n;

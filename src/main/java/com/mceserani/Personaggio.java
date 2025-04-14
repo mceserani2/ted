@@ -9,6 +9,8 @@ public class Personaggio {
     private int vita = 100;
     private Posizione p;
 
+    public Personaggio(){}
+
     public Personaggio(String n, String pr, int e, Skin s, Posizione pos){
         nome = n;
         provenienza = pr;

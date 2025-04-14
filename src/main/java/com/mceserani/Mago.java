@@ -6,6 +6,10 @@ public class Mago extends Personaggio{
 
     private int mana = 100;
 
+    public Mago(){
+        super();
+    }
+
     public Mago(String n, String pr, int e,Skin s, Posizione pos){
         super(n,pr,e,s,pos);
     }
